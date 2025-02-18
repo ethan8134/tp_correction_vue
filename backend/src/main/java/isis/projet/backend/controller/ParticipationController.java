@@ -5,18 +5,19 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
+
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/participations")
+@RequestMapping("/api/gestion/participation")
 public class ParticipationController {
 
     private final ParticipationProjet participationService;
-    private final ModelMapper mapper;
+    private final ParticipationMapper participationMapper;
 
-    public ParticipationController(ParticipationProjet participationService, ModelMapper mapper) {
+    public ParticipationController(ParticipationProjet participationService, ParticipationMapper participationMapper) {
         this.participationService = participationService;
-        this.mapper = mapper;
+        this.participationMapper = participationMapper;
     }
 
     /**
@@ -35,12 +36,11 @@ public class ParticipationController {
             @RequestParam String role,
             @RequestParam float pourcentage) {
         try {
-            // On appelle le service métier
+            // Enregistrement de la participation
             var participation = participationService.enregistrerParticipation(matricule, codeProjet, role, pourcentage);
-            // On renvoie la participation créée sous la forme d'un DTO
-            var body = mapper.map(participation, ParticipationDTO.class);
+            // Transformation en DTO
+            var body = participationMapper.toDto(participation);
             return ResponseEntity.ok(body);
-            // En cas d'erreur, on renvoie des informations sur l'erreur pour le frontend
         } catch (NoSuchElementException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(new ApiErrorDTO(e.getMessage()));
         } catch (DataIntegrityViolationException e) {
