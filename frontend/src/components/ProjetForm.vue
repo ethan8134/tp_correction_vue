@@ -88,10 +88,16 @@ function refresh() {
   doAjaxRequest("/api/projets")
     .then((result) => {
       console.log("📌 Données reçues :", result);
+
+      // Vérifie si la structure "_embedded.projets" existe
       if (result._embedded && result._embedded.projets) {
         data.projets = result._embedded.projets;
+      } else if (Array.isArray(result)) {
+        // Cas où l'API retourne un tableau direct
+        data.projets = result;
       } else {
-        data.projets = result; // Cas où l'API retourne une liste simple
+        console.error("❌ Erreur : Structure inattendue", result);
+        data.projets = [];
       }
     })
     .catch(error => {
@@ -99,6 +105,7 @@ function refresh() {
       alert("Erreur : Impossible de charger les projets.");
     });
 }
+
 
 
 // Appeler la fonction refresh() pour récupérer la liste des pays au chargement du composant
