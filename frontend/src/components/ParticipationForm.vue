@@ -84,50 +84,53 @@ export default {
   methods: {
     async fetchPersonnes() {
       try {
-        console.log("📡 Fetching personnes...");
-        const response = await axios.get('http://localhost:8989/api/personnes');
+        const response = await axios.get("http://localhost:8989/api/personnes");
         this.personnes = response.data;
-        console.log("✅ Personnes chargées :", this.personnes);
       } catch (error) {
-        console.error("❌ Erreur fetchPersonnes:", error);
-        this.errorMessage = `Erreur chargement personnes: ${error.message}`;
+        console.error("❌ Erreur fetchPersonnes :", error);
+        this.errorMessage = "Erreur lors du chargement des personnes.";
       }
     },
+
     async fetchProjets() {
       try {
-        console.log("📡 Fetching projets...");
-        const response = await axios.get('http://localhost:8989/api/projets');
+        const response = await axios.get("http://localhost:8989/api/projets");
         this.projets = response.data;
-        console.log("✅ Projets chargés :", this.projets);
       } catch (error) {
-        console.error("❌ Erreur fetchProjets:", error);
-        this.errorMessage = `Erreur chargement projets: ${error.message}`;
+        console.error("❌ Erreur fetchProjets :", error);
+        this.errorMessage = "Erreur lors du chargement des projets.";
       }
-    }
-    ,
+    },
+
     updatePourcentage() {
       // Cette méthode est déclenchée à chaque déplacement du curseur
       console.log(`Valeur du pourcentage : ${this.pourcentage}`);
     },
     async submitForm() {
       try {
-        const response = await axios.post('/api/gestion/participation', {
+        const requestBody = {
           matricule: this.selectedPersonne,
           codeProjet: this.selectedProjet,
           role: this.role,
-          pourcentage: this.pourcentage / 100, // On convertit en valeur décimale
+          pourcentage: this.pourcentage / 100, // Conversion en valeur décimale
+        };
+
+        const response = await axios.post("/api/gestion/participation", requestBody, {
+          headers: { "Content-Type": "application/json" },
         });
-        this.successMessage = 'Participation enregistrée avec succès';
+
+        this.successMessage = "Participation enregistrée avec succès !";
         this.errorMessage = null; // Réinitialiser l'erreur
       } catch (error) {
         if (error.response) {
-          this.errorMessage = error.response.data.message || 'Erreur inconnue';
+          this.errorMessage = error.response.data.message || "Erreur inconnue";
         } else {
-          this.errorMessage = 'Erreur de communication avec le serveur';
+          this.errorMessage = "Erreur de communication avec le serveur";
         }
-        this.successMessage = null; // Réinitialiser la réussite
+        this.successMessage = null; // Réinitialiser le succès
       }
-    },
+    }
+    ,
     getRangeBackground() {
       // Calcule la couleur du fond en fonction du pourcentage
       const percentage = this.pourcentage;

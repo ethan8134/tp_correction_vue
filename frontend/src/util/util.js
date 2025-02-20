@@ -8,13 +8,13 @@
  * @returns {Promise} Une promesse qui sera résolue avec le résultat de l'appel AJAX
  * @throws {object} Une exception qui sera levée si l'API a signalé une erreur
  */
-export default async function doAjaxRequest(url, options) {
-  // On fait l'appel AJAX
-  const response = await fetch(url, options);
-  // On récupère le résultat transmis en format JSON
-  const result = await response.json();
-  // L'API a signalé une erreur, on lève une exception
-  if (!response.ok) throw result;
-  // Tout s'est bien passé, on renvoie le résultat
-  return result;
+export default function doAjaxRequest(url, options = {}) {
+  return fetch(`http://localhost:8989${url}`, options)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP! Statut : ${response.status}`);
+      }
+      return response.json();
+    });
 }
+

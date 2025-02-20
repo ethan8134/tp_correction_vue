@@ -55,33 +55,51 @@ let data = reactive({
 });
 
 function ajouteProjet() {
-  // Ajouter un projet avec les données du formulaire
-  const options = { // Options de la requête fetch
-    method: "POST", // Verbe HTTP POST pour ajouter un enregistrement
-    // On transmet les données du formulaire dans le corps de la requête
+  // Vérifie si un nom est bien saisi
+  if (!data.formulaire.nom.trim()) {
+    alert("Veuillez entrer un nom de projet.");
+    return;
+  }
+
+  const options = {
+    method: "POST",
     body: JSON.stringify(data.formulaire),
     headers: {
       "Content-Type": "application/json",
     },
   };
-  // On appelle l'API REST générée par les repositories Spring Data REST
+
+  // ✅ Correction de l'URL en ajoutant `/api/projets`
   doAjaxRequest("/api/projets", options)
     .then((result) => {
-      console.log("Projet ajouté :", result);
-      // Réinitialiser le formulaire
-      data.formulaire = {...projetVide};
-      refresh(); // Rafraîchir la liste des pays
+      console.log("✅ Projet ajouté :", result);
+      alert("Projet ajouté avec succès !");
+      data.formulaire = {...projetVide}; // Réinitialise le formulaire
+      refresh(); // Recharge la liste des projets
     })
-    .catch(error => alert(error.message));
+    .catch(error => {
+      console.error("❌ Erreur lors de l'ajout du projet :", error);
+      alert("Erreur : " + error.message);
+    });
 }
 
+
 function refresh() {
-  doAjaxRequest("/api/projets") // Méthode GET par défaut
+  doAjaxRequest("/api/projets")
     .then((result) => {
-      data.projets = result._embedded.projets;
+      console.log("📌 Données reçues :", result);
+      if (result._embedded && result._embedded.projets) {
+        data.projets = result._embedded.projets;
+      } else {
+        data.projets = result; // Cas où l'API retourne une liste simple
+      }
     })
-    .catch(error => alert(error.message));
+    .catch(error => {
+      console.error("❌ Erreur lors du chargement des projets :", error);
+      alert("Erreur : Impossible de charger les projets.");
+    });
 }
+
 
 // Appeler la fonction refresh() pour récupérer la liste des pays au chargement du composant
 onMounted(refresh);

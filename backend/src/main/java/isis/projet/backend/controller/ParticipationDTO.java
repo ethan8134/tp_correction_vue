@@ -15,4 +15,6 @@ public class ParticipationDTO implements Serializable {
     String projetNom;
     String personneNom;
     String personnePrenom;
+    Integer matricule;
+    Integer codeProjet;
 }
