@@ -1,5 +1,6 @@
 package isis.projet.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -33,20 +34,8 @@ public class Projet {
 
     private LocalDate fin;
 
+    @JsonIgnore // Empêche la récursion infinie en masquant les participations
     @ToString.Exclude
     @OneToMany(mappedBy = "projet", orphanRemoval = true)
     private List<Participation> contributeurs = new ArrayList<>();
-
-    /**
-     * Termine le projet
-     *  (met la date de fin à la date du jour)
-     */
-    public void terminer() {
-        fin = LocalDate.now();
-    }
-
-    public boolean estTermine() {
-        return fin != null;
-    }
-
 }

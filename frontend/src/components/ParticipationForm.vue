@@ -84,20 +84,27 @@ export default {
   methods: {
     async fetchPersonnes() {
       try {
-        const response = await axios.get('/api/personnes');
+        console.log("📡 Fetching personnes...");
+        const response = await axios.get('http://localhost:8989/api/personnes');
         this.personnes = response.data;
+        console.log("✅ Personnes chargées :", this.personnes);
       } catch (error) {
-        this.errorMessage = 'Erreur lors du chargement des personnes';
+        console.error("❌ Erreur fetchPersonnes:", error);
+        this.errorMessage = `Erreur chargement personnes: ${error.message}`;
       }
     },
     async fetchProjets() {
       try {
-        const response = await axios.get('/api/projets');
+        console.log("📡 Fetching projets...");
+        const response = await axios.get('http://localhost:8989/api/projets');
         this.projets = response.data;
+        console.log("✅ Projets chargés :", this.projets);
       } catch (error) {
-        this.errorMessage = 'Erreur lors du chargement des projets';
+        console.error("❌ Erreur fetchProjets:", error);
+        this.errorMessage = `Erreur chargement projets: ${error.message}`;
       }
-    },
+    }
+    ,
     updatePourcentage() {
       // Cette méthode est déclenchée à chaque déplacement du curseur
       console.log(`Valeur du pourcentage : ${this.pourcentage}`);

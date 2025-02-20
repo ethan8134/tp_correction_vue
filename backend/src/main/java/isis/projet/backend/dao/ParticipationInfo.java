@@ -3,20 +3,21 @@ package isis.projet.backend.dao;
 import isis.projet.backend.entity.Personne;
 
 /**
- * Une projection utilisée comme résultat de requêtes JPQL
+ * Interface de projection pour récupérer les informations de participation.
  */
 public interface ParticipationInfo {
     /**
-     * @return la {@link isis.projet.backend.entity.Personne} concernée
+     * Retourne la personne concernée par la participation.
      */
     Personne getContributeur();
+
     /**
-     * @return Le pourcentage d'occupation de la personne dans des projets en cours
-     */
-    Float getPourcentage();
-    /**
-     * @return Le nombre de projets en cours dans lesquels la personne participe
+     * Retourne le nombre de projets en cours.
      */
     int getNombre();
 
+    /**
+     * Retourne le pourcentage d'occupation de la personne.
+     */
+    Float getPourcentage();
 }

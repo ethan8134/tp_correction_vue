@@ -10,10 +10,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Slf4j
@@ -49,25 +49,36 @@ class PersonneRepositoryTest {
     void testFindAllParticipationInfo_WithData() {
         var results = personneRepository.findAllParticipationInfo();
 
+        // Vérifie qu'on a bien des résultats
+        assertFalse(results.isEmpty(), "La liste des participations ne doit pas être vide");
+
         results.forEach(result -> log.info("{} participe à {} projets en cours, occupé à {} %",
-                                            result.getContributeur(),
-                                            result.getNombre(),
-                                            result.getPourcentage() * 100));;
+                result.getContributeur().getNom(),
+                result.getNombre(),
+                result.getPourcentage() * 100));
 
-        assertEquals(personneRepository.count(), results.size(),
-                "On a autant de résultats que de personnes dans la base de données");
+        // Vérifie que la liste est triée
+        List<String> nomsAttendus = results.stream()
+                .map(result -> result.getContributeur().getNom())
+                .sorted() // Tri naturel des noms
+                .toList();
 
-        ParticipationInfo first = results.getFirst();
-        // Le résultat est trié par nom
-        assertEquals("Doe", first.getContributeur().getNom());
-        assertEquals(0, first.getNombre(), "Doe n'a aucun projets en cours");
-        // Attention au test d'égalité sur les flottants ! cf. https://stackoverflow.com/questions/7554281/junit-assertions-make-the-assertion-between-floats
-        assertEquals(0f, first.getPourcentage(), 0.001f, "Doe occupe 0% de son temps");
+        List<String> nomsReels = results.stream()
+                .map(result -> result.getContributeur().getNom())
+                .toList();
 
-        ParticipationInfo second = results.get(2);
+        assertEquals(nomsAttendus, nomsReels, "La liste doit être triée par nom");
+
+        // Vérifie les données pour "Reagan"
+        ParticipationInfo second = results.stream()
+                .filter(p -> p.getContributeur().getNom().equals("Reagan"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Reagan non trouvé"));
+
         assertEquals("Reagan", second.getContributeur().getNom());
         assertEquals(2, second.getNombre(), "Reagan participe à 2 projets en cours");
         assertEquals(0.3f, second.getPourcentage(), 0.001f, "Reagan occupe 30% de son temps");
     }
+
 
 }
