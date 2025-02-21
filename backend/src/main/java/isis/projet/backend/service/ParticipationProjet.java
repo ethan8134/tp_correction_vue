@@ -29,20 +29,16 @@ public class ParticipationProjet {
 
     @Transactional
     public Participation enregistrerParticipation(Integer matricule, Integer codeProjet, String role, float pourcentage) {
-        // Vérification si le projet existe
         Projet affectation = projetDao.findById(codeProjet)
                 .orElseThrow(() -> new NoSuchElementException("Projet non trouvé avec l'ID : " + codeProjet));
 
-        // Vérification si le projet est terminé
         if (affectation.getFin() != null) {
             throw new IllegalStateException("Le projet est terminé et ne peut plus accepter de participants.");
         }
 
-        // Vérification si la personne existe
         Personne contributeur = personneDao.findById(matricule)
                 .orElseThrow(() -> new NoSuchElementException("Personne non trouvée avec le matricule : " + matricule));
 
-        // Vérification du nombre de participations et du temps total alloué
         Optional<ParticipationInfo> participationInfo = personneDao.findParticipationInfoByMatricule(matricule);
 
         if (participationInfo.isPresent()) {
@@ -57,7 +53,6 @@ public class ParticipationProjet {
             }
         }
 
-        // Création et enregistrement de la participation
         Participation participation = new Participation(role, pourcentage, affectation, contributeur);
 
         try {

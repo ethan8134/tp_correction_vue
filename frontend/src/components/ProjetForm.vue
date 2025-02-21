@@ -38,7 +38,7 @@
 
 <script setup>
 import {onMounted, reactive} from "vue";
-// Importer la fonction doAjaxRequest qui gère les erreurs d'API
+// gère les erreurs d'API
 import doAjaxRequest from "@/util/util.js"
 
 // Pour réinitialiser le formulaire
@@ -46,16 +46,13 @@ const projetVide = {
   nom: ""
 };
 
-// Les données du composant
+
 let data = reactive({
-  // Les données saisies dans le formulaire
   formulaire: {...projetVide},
-  // Les projets récupérés depuis l'API
   projets: [],
 });
 
 function ajouteProjet() {
-  // Vérifie si un nom est bien saisi
   if (!data.formulaire.nom.trim()) {
     alert("Veuillez entrer un nom de projet.");
     return;
@@ -69,16 +66,15 @@ function ajouteProjet() {
     },
   };
 
-  // ✅ Correction de l'URL en ajoutant `/api/projets`
   doAjaxRequest("/api/projets", options)
     .then((result) => {
-      console.log("✅ Projet ajouté :", result);
+      console.log("Projet ajouté :", result);
       alert("Projet ajouté avec succès !");
       data.formulaire = {...projetVide}; // Réinitialise le formulaire
       refresh(); // Recharge la liste des projets
     })
     .catch(error => {
-      console.error("❌ Erreur lors de l'ajout du projet :", error);
+      console.error("Erreur lors de l'ajout du projet :", error);
       alert("Erreur : " + error.message);
     });
 }
@@ -87,28 +83,25 @@ function ajouteProjet() {
 function refresh() {
   doAjaxRequest("/api/projets")
     .then((result) => {
-      console.log("📌 Données reçues :", result);
+      console.log("Données reçues depuis l'API :", result);
 
-      // Vérifie si la structure "_embedded.projets" existe
       if (result._embedded && result._embedded.projets) {
         data.projets = result._embedded.projets;
       } else if (Array.isArray(result)) {
-        // Cas où l'API retourne un tableau direct
         data.projets = result;
       } else {
-        console.error("❌ Erreur : Structure inattendue", result);
+        console.error("Structure inattendue :", result);
         data.projets = [];
       }
     })
     .catch(error => {
-      console.error("❌ Erreur lors du chargement des projets :", error);
+      console.error("Erreur lors du chargement des projets :", error);
       alert("Erreur : Impossible de charger les projets.");
     });
 }
 
 
 
-// Appeler la fonction refresh() pour récupérer la liste des pays au chargement du composant
 onMounted(refresh);
 </script>
 
@@ -171,7 +164,7 @@ onMounted(refresh);
 
 table {
   width: 100%;
-  border-collapse: collapse; /* Supprime les bordures en double */
+  border-collapse: collapse;
   margin-top: 10px;
 }
 
@@ -179,18 +172,18 @@ thead th {
   background-color: #007BFF;
   color: #fff;
   padding: 10px;
-  text-align: left; /* Alignement à gauche */
+  text-align: left;
   border: 1px solid #ddd;
 }
 
 tbody td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left; /* Alignement à gauche */
+  text-align: left;
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #f2f2f2; /* Lignes alternées pour une meilleure lisibilité */
+  background-color: #f2f2f2;
 }
 
 tbody tr:hover {

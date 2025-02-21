@@ -15,7 +15,7 @@ import java.util.*;
 public class Personne {
 
     @Id
-    @Setter(lombok.AccessLevel.NONE) // Ne génère pas de setter pour cet attribut
+    @Setter(lombok.AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer matricule;
 

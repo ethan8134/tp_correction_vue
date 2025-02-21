@@ -49,7 +49,6 @@ class PersonneRepositoryTest {
     void testFindAllParticipationInfo_WithData() {
         var results = personneRepository.findAllParticipationInfo();
 
-        // Vérifie qu'on a bien des résultats
         assertFalse(results.isEmpty(), "La liste des participations ne doit pas être vide");
 
         results.forEach(result -> log.info("{} participe à {} projets en cours, occupé à {} %",
@@ -57,10 +56,9 @@ class PersonneRepositoryTest {
                 result.getNombre(),
                 result.getPourcentage() * 100));
 
-        // Vérifie que la liste est triée
         List<String> nomsAttendus = results.stream()
                 .map(result -> result.getContributeur().getNom())
-                .sorted() // Tri naturel des noms
+                .sorted()
                 .toList();
 
         List<String> nomsReels = results.stream()
@@ -69,7 +67,6 @@ class PersonneRepositoryTest {
 
         assertEquals(nomsAttendus, nomsReels, "La liste doit être triée par nom");
 
-        // Vérifie les données pour "Reagan"
         ParticipationInfo second = results.stream()
                 .filter(p -> p.getContributeur().getNom().equals("Reagan"))
                 .findFirst()

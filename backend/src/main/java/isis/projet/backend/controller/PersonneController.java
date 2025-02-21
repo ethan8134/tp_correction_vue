@@ -23,15 +23,15 @@ public class PersonneController {
 
     @GetMapping
     public ResponseEntity<List<Personne>> getAllPersonnes() {
-        log.info("🔹 Requête reçue pour récupérer toutes les personnes...");
+        log.info("Requête reçue pour récupérer toutes les personnes...");
         List<Personne> personnes = personneService.getAllPersonnes();
 
         if (personnes.isEmpty()) {
-            log.warn("⚠ Aucune personne trouvée !");
+            log.warn("Aucune personne trouvée !");
             return ResponseEntity.noContent().build();
         }
 
-        log.info("✅ Renvoi de {} personnes", personnes.size());
+        log.info("Renvoi de {} personnes", personnes.size());
         return ResponseEntity.ok(personnes);
     }
 }

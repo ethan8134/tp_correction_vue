@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 public class Projet {
     @Id
-    @Setter(lombok.AccessLevel.NONE) // Ne génère pas de setter pour cet attribut
+    @Setter(lombok.AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;

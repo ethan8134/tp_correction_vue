@@ -87,7 +87,7 @@ export default {
         const response = await axios.get("http://localhost:8989/api/personnes");
         this.personnes = response.data;
       } catch (error) {
-        console.error("❌ Erreur fetchPersonnes :", error);
+        console.error("Erreur fetchPersonnes :", error);
         this.errorMessage = "Erreur lors du chargement des personnes.";
       }
     },
@@ -97,13 +97,12 @@ export default {
         const response = await axios.get("http://localhost:8989/api/projets");
         this.projets = response.data;
       } catch (error) {
-        console.error("❌ Erreur fetchProjets :", error);
+        console.error("Erreur fetchProjets :", error);
         this.errorMessage = "Erreur lors du chargement des projets.";
       }
     },
 
     updatePourcentage() {
-      // Cette méthode est déclenchée à chaque déplacement du curseur
       console.log(`Valeur du pourcentage : ${this.pourcentage}`);
     },
     async submitForm() {
@@ -144,15 +143,15 @@ export default {
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Espacement entre les éléments du formulaire */
+  gap: 20px;
   align-items: center;
   justify-content: center;
   width: 80%;
   margin: auto;
-  padding: 20px; /* Ajout de padding */
+  padding: 20px;
   border: 2px solid #ccc; /* Bordure autour du formulaire */
-  border-radius: 10px; /* Coins arrondis */
-  background-color: #f9f9f9; /* Légère couleur de fond */
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
 
 .form-group {
@@ -171,7 +170,7 @@ export default {
 .form-group input {
   padding: 10px;
   font-size: 16px;
-  width: 100%; /* 100% pour utiliser toute la largeur disponible */
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 5px;
 }

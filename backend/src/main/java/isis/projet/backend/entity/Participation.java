@@ -17,7 +17,7 @@ import lombok.*;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"PROJET_ID", "PERSONNE_MATRICULE"}))
 public class Participation {
     @Id
-    @Setter(lombok.AccessLevel.NONE) // Ne génère pas de setter pour cet attribut
+    @Setter(lombok.AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
